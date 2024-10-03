@@ -1,0 +1,44 @@
+query GetEntities {
+  getEntities {
+    id
+    name
+    ... on Company {
+      industry
+      contactEmail
+    }
+    ... on Contact {
+      email
+      phone
+    }
+  }
+}
+
+mutation CreateEntity($input: CreateEntityInput!) {
+  createEntity(input: $input) {
+    id
+    name
+    ... on Company {
+      industry
+      contactEmail
+    }
+    ... on Contact {
+      email
+      phone
+    }
+  }
+}
+
+mutation updateEntity($input: UpdateEntityInput!) {
+  updateEntity(input: $input) {
+    id
+    name
+    ... on Company {
+      industry
+      contactEmail
+    }
+    ... on Contact {
+      email
+      phone
+    }
+  }
+}
