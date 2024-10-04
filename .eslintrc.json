@@ -1,3 +1,67 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": [
+  "next/typescript",   
+  "standard-with-typescript",
+  "standard-jsx",
+  "standard-react",
+  "next/core-web-vitals"
+],
+  "parser": "@typescript-eslint/parser",
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"], // Your TypeScript files extension
+
+      "parserOptions": {
+        "project": "./tsconfig.json"
+      },
+      "rules": {
+    /* ---- TypeScript rules ---- */
+    // Disable no-undef rule because it is handled by typescript
+    "no-undef": "off",
+
+    // Disable triple-slash-reference to have access to Next definitions
+    "@typescript-eslint/triple-slash-reference": "off",
+    // Disable strict boolean expressions
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    // Disable explicit function return type
+    "@typescript-eslint/explicit-function-return-type": "off",
+    // Force add `type` when importing/exporting types
+    "@typescript-eslint/consistent-type-imports": "warn",
+    "@typescript-eslint/consistent-type-exports": "warn"
+      }
+    }
+  ],
+  "rules": {
+    /* --- Regular rules ---*/
+    "no-console": "warn",
+
+    /* ---- React rules ---- */
+
+    // Props per line max
+    "react/jsx-max-props-per-line": [1, { "when": "multiline" }],
+
+    /* ---- Import rules ---- */
+
+    // Add new line after all imports
+    "import/newline-after-import": 1,
+    // Sort import
+    "import/order": [
+      "warn",
+      {
+        "alphabetize": { "order": "asc", "caseInsensitive": true },
+        "newlines-between": "always",
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "type"
+        ],
+        "pathGroups": [{ "pattern": "@/**", "group": "internal" }],
+        "pathGroupsExcludedImportTypes": ["builtin"]
+      }
+    ]
+  }
 }
