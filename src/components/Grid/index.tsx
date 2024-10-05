@@ -1,12 +1,12 @@
 'use client'
 
 import { themeQuartz } from '@ag-grid-community/theming'
-import { type ColDef, type ICellRendererParams } from 'ag-grid-community'
+import { type ColDef } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
 import { useEffect, useState } from 'react'
 
 import CreateModal from '@/components/Modals/Create'
-import { Button } from '@/components/ui/button'
+import EditModal from '@/components/Modals/Edit'
 import { type Company, type Contact, useGetEntitiesQuery } from '@/types/graphql'
 
 // TODO: create dialog component's for updating entries
@@ -32,18 +32,6 @@ const Grid = () => {
   const { loading, error, data } = useGetEntitiesQuery()
 
   const [rowData, setRowData] = useState<Array<Contact | Company>>()
-
-  const CellButton = (params: ICellRendererParams) => {
-    const onClick = () => {
-      console.log(params.data)
-    }
-
-    return (
-      <div className='w-full h-full flex items-center'>
-        <Button onClick={onClick} variant='secondary'>click me</Button>
-      </div>
-    )
-  }
 
   useEffect(() => {
     const arr: Array<Contact | Company> = []
@@ -71,7 +59,7 @@ const Grid = () => {
     { field: 'phone', flex: 1 },
     { field: 'industry', flex: 1 },
     { field: 'contactEmail', flex: 1 },
-    { field: 'edit', cellRenderer: CellButton, flex: 1 }
+    { field: 'edit', cellRenderer: EditModal, flex: 1 }
   ])
 
   if (loading) return <span className='text-white'>Loading...</span>

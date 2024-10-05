@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger
@@ -22,9 +23,10 @@ const CreateModal = () => {
           Create
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className='overflow-y-auto max-h-screen'>
         <DialogHeader className='gap-4'>
           <DialogTitle>Create a new company or contact</DialogTitle>
+          <DialogDescription>Please review and update the information below to ensure that the details of the selected contact or company are accurate and up to date. Once you're finished, click 'Save' to apply your changes.</DialogDescription>
           <CreateForm onOpenChange={setOpen} />
         </DialogHeader>
       </DialogContent>

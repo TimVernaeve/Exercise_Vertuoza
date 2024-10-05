@@ -18,9 +18,9 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/hooks/use-toast'
-import { EntityType, useCreateEntityMutation } from '@/types/graphql'
+import { type Company, type Contact, EntityType, useUpdateEntityMutation } from '@/types/graphql'
 import { type ValueData } from '@/types/types'
-import { ContactSchema, CompanySchema } from '@/types/zod/createSchema'
+import { ContactSchema, CompanySchema } from '@/types/zod/editSchema'
 
 const getFormSchema = (type: EntityType) => {
   return type === EntityType.Contact ? ContactSchema : CompanySchema
@@ -28,41 +28,50 @@ const getFormSchema = (type: EntityType) => {
 
 type FormData = z.infer<ReturnType<typeof getFormSchema>>
 
-const CreateForm = ({ onOpenChange }: { onOpenChange: (isOpen: boolean) => void }) => {
+interface EditFormProps {
+  onOpenChange: (isOpen: boolean) => void
+  data: Company | Contact
+}
+
+const EditForm = ({ onOpenChange, data }: EditFormProps) => {
   const { toast } = useToast()
   const [errorMessage, setErrorMessage] = useState<string | undefined>()
-  const [entityType, setEntityType] = useState<EntityType>(EntityType.Contact)
-  const [createEntity] = useCreateEntityMutation()
+  const [entityType, setEntityType] = useState<EntityType>(data.__typename === 'Contact' ? EntityType.Contact : EntityType.Company)
+  const [updateEntity] = useUpdateEntityMutation()
 
   const formSchema = getFormSchema(entityType)
+
+  const contact = data.__typename === 'Contact' ? data : undefined
+  const company = data.__typename === 'Company' ? data : undefined
 
   const defaultValues = {
     CONTACT: {
       entityType,
-      name: '',
-      email: '',
-      phone: ''
+      name: data.name,
+      email: contact ? contact.email : '',
+      phone: contact ? contact.phone : ''
     },
     COMPANY: {
       entityType,
-      name: '',
-      industry: '',
-      contactEmail: ''
+      name: data.name,
+      industry: company ? company.industry : '',
+      contactEmail: company ? company.contactEmail : ''
     }
   }
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: defaultValues.CONTACT
+    defaultValues: entityType === EntityType.Contact ? defaultValues.CONTACT : defaultValues.COMPANY
   })
 
   const onSubmit = async (values: FormData) => {
     try {
       const valueData = values as ValueData
 
-      const response = await createEntity({
+      const response = await updateEntity({
         variables: {
           input: {
+            id: data.id,
             entityType,
             name: valueData.name,
             ...(valueData.entityType === EntityType.Contact
@@ -81,7 +90,7 @@ const CreateForm = ({ onOpenChange }: { onOpenChange: (isOpen: boolean) => void 
       if (response.data) {
         onOpenChange(false)
         toast({
-          title: `New ${entityType.toLowerCase()} added succesfully`
+          title: `${entityType.toLowerCase()} updated succesfully`
         })
       }
     } catch (err) {
@@ -144,7 +153,7 @@ const CreateForm = ({ onOpenChange }: { onOpenChange: (isOpen: boolean) => void 
                 <Input placeholder={entityType === EntityType.Contact ? 'Email' : 'Industry'} {...field} />
               </FormControl>
               <FormDescription>
-                This is your {entityType === EntityType.Contact ? 'email' : 'industry'}.
+                This is your {entityType === EntityType.Contact ? 'Email' : 'Industry'}.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -168,7 +177,7 @@ const CreateForm = ({ onOpenChange }: { onOpenChange: (isOpen: boolean) => void 
         />
         {errorMessage && <span className='text-sm text-red-500'>{errorMessage}</span>}
         <div className='flex gap-4'>
-          <Button type='submit'>Create</Button>
+          <Button type='submit'>Save</Button>
           <Button variant='inactive' onClick={() => { onOpenChange(false) }} type='button'>Cancel</Button>
         </div>
       </form>
@@ -176,4 +185,4 @@ const CreateForm = ({ onOpenChange }: { onOpenChange: (isOpen: boolean) => void 
   )
 }
 
-export default CreateForm
+export default EditForm
