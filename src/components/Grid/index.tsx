@@ -9,9 +9,6 @@ import CreateModal from '@/components/Modals/Create'
 import EditModal from '@/components/Modals/Edit'
 import { type Company, type Contact, useGetEntitiesQuery } from '@/types/graphql'
 
-// TODO: create dialog component's for updating entries
-// TODO: write inline documentation
-
 const myTheme = themeQuartz
   .withParams({
     backgroundColor: '#1f2836',
@@ -30,7 +27,6 @@ const myTheme = themeQuartz
 
 const Grid = () => {
   const { loading, error, data } = useGetEntitiesQuery()
-
   const [rowData, setRowData] = useState<Array<Contact | Company>>()
 
   useEffect(() => {
@@ -54,6 +50,7 @@ const Grid = () => {
 
   const [colDefs] = useState<ColDef[]>([
     { field: 'id', hide: true },
+    { field: '__typename', headerName: 'Type', flex: 1 },
     { field: 'name', flex: 1 },
     { field: 'email', flex: 1 },
     { field: 'phone', flex: 1 },
