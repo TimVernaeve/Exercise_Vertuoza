@@ -1,6 +1,7 @@
 import localFont from 'next/font/local'
 
 import ApolloContext from '@/components/ApolloClient'
+import { Toaster } from '@/components/ui/toaster'
 
 import type { Metadata } from 'next'
 import './globals.css'
@@ -33,6 +34,7 @@ export default function RootLayout ({
       >
         <ApolloContext>
           {children}
+          <Toaster />
         </ApolloContext>
       </body>
     </html>

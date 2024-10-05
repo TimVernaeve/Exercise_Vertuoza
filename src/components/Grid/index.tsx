@@ -5,10 +5,12 @@ import { type ColDef, type ICellRendererParams } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
 import { useEffect, useState } from 'react'
 
+import CreateModal from '@/components/Modals/Create'
 import { Button } from '@/components/ui/button'
 import { type Company, type Contact, useGetEntitiesQuery } from '@/types/graphql'
 
-// TODO: create dialog component's for updating and creating new entries
+// TODO: create dialog component's for updating entries
+// TODO: write inline documentation
 
 const myTheme = themeQuartz
   .withParams({
@@ -28,8 +30,6 @@ const myTheme = themeQuartz
 
 const Grid = () => {
   const { loading, error, data } = useGetEntitiesQuery()
-
-  // const [createEntity] = useCreateEntityMutation();
 
   const [rowData, setRowData] = useState<Array<Contact | Company>>()
 
@@ -79,13 +79,16 @@ const Grid = () => {
 
   return (
     <div
-      className='flex flex-col gap-4 w-[50%] h-[500px]'
+      className='flex flex-col gap-4 h-full w-full p-8 mx-auto max-w-[1440px]'
     >
-      <Button variant='secondary' className='w-fit'>Add</Button>
+      <CreateModal />
       <AgGridReact
         theme={myTheme}
         rowData={rowData}
         columnDefs={colDefs}
+        autoSizeStrategy={{
+          type: 'fitCellContents'
+        }}
       />
     </div>
   )
