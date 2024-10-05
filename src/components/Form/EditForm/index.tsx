@@ -104,7 +104,11 @@ const EditForm = ({ onOpenChange, data }: EditFormProps) => {
 
   const handleToggle = (type: EntityType.Contact | EntityType.Company) => {
     setEntityType(type)
-    form.reset(defaultValues[type])
+
+    // Use a timeout to allow React to process the state change first (queue system)
+    setTimeout(() => {
+      form.reset(defaultValues[type])
+    }, 0)
   }
 
   return (
@@ -153,7 +157,7 @@ const EditForm = ({ onOpenChange, data }: EditFormProps) => {
                 <Input placeholder={entityType === EntityType.Contact ? 'Email' : 'Industry'} {...field} />
               </FormControl>
               <FormDescription>
-                This is your {entityType === EntityType.Contact ? 'Email' : 'Industry'}.
+                This is your {entityType === EntityType.Contact ? 'email' : 'industry'}.
               </FormDescription>
               <FormMessage />
             </FormItem>
