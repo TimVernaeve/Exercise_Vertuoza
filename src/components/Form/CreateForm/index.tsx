@@ -94,6 +94,7 @@ const CreateForm = ({ onOpenChange }: { onOpenChange: (isOpen: boolean) => void 
   }
 
   const handleToggle = (type: EntityType.Contact | EntityType.Company) => {
+    if (type === entityType) return
     setEntityType(type)
 
     // Use a timeout to allow React to process the state change first (queue system)
