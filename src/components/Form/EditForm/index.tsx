@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,8 +18,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/hooks/use-toast'
 import { type Company, type Contact, EntityType, useUpdateEntityMutation } from '@/types/graphql'
-import { type ValueData } from '@/types/types'
-import { ContactSchema, CompanySchema } from '@/types/zod/editSchema'
+import { ContactSchema, CompanySchema } from '@/types/zod/schema'
 
 const getFormSchema = (type: EntityType) => {
   return type === EntityType.Contact ? ContactSchema : CompanySchema
@@ -66,22 +64,20 @@ const EditForm = ({ onOpenChange, data }: EditFormProps) => {
 
   const onSubmit = async (values: FormData) => {
     try {
-      const valueData = values as ValueData
-
       const response = await updateEntity({
         variables: {
           input: {
             id: data.id,
             entityType,
-            name: valueData.name,
-            ...(valueData.entityType === EntityType.Contact
+            name: values.name,
+            ...(values.type === EntityType.Contact
               ? {
-                  email: valueData.email,
-                  phone: valueData.phone
+                  email: values.email,
+                  phone: values.phone
                 }
               : {
-                  industry: valueData.industry,
-                  contactEmail: valueData.contactEmail
+                  industry: values.industry,
+                  contactEmail: values.contactEmail
                 })
           }
         }
