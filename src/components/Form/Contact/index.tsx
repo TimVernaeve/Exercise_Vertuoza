@@ -85,7 +85,7 @@ const ContactForm = ({ onOpenChange, handleSubmit, data }: ContactFormProps) => 
                 <Input placeholder='Phone' {...field} />
               </FormControl>
               <FormDescription>
-                This is your 'phone number'.
+                This is your phone number.
               </FormDescription>
               <FormMessage />
             </FormItem>
