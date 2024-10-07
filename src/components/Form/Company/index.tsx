@@ -92,7 +92,7 @@ const CompanyForm = ({ onOpenChange, handleSubmit, data }: CompanyFormProps) => 
           )}
         />
         <div className='flex gap-4'>
-          <Button type='submit'>Create</Button>
+          <Button type='submit'>Save</Button>
           <Button variant='inactive' onClick={() => { onOpenChange(false) }} type='button'>Cancel</Button>
         </div>
       </form>
