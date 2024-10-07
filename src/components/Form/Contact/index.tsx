@@ -37,17 +37,10 @@ const ContactForm = ({ onOpenChange, handleSubmit, data }: ContactFormProps) => 
     defaultValues
   })
 
-  const onSubmit = (values: z.infer<typeof ContactSchema>) => {
-    handleSubmit(values)
-  }
-
   return (
     <Form {...form}>
       <form
-        onSubmit={(event) => {
-          event.preventDefault()
-          void form.handleSubmit(onSubmit)()
-        }}
+        onSubmit={form.handleSubmit(handleSubmit)}
         className='space-y-8'
       >
         <FormField

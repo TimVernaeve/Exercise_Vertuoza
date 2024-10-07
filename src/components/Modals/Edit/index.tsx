@@ -107,9 +107,7 @@ const EditModal = (params: DataValues) => {
           {activeForm === 'Company' && (
             <CompanyForm
               onOpenChange={setOpen}
-              handleSubmit={(data) => {
-                void onSubmit(data)
-              }}
+              handleSubmit={onSubmit}
               data={params.data.__typename === 'Company' ? params.data : undefined}
             />
           )}

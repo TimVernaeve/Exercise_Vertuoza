@@ -37,14 +37,10 @@ const CompanyForm = ({ onOpenChange, handleSubmit, data }: CompanyFormProps) => 
     defaultValues
   })
 
-  const onSubmit = (values: z.infer<typeof CompanySchema>) => {
-    handleSubmit(values)
-  }
-
   return (
     <Form {...form}>
       <form
-        onSubmit={void form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(handleSubmit)}
         className='space-y-8'
       >
         <FormField

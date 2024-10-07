@@ -89,9 +89,7 @@ const CreateModal = () => {
           </div>
           {activeForm === 'Contact' && (
             <ContactForm
-              handleSubmit={(data) => {
-                void onSubmit(data)
-              }}
+              handleSubmit={onSubmit}
               onOpenChange={setOpen}
             />
           )}
