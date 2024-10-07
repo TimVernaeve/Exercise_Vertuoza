@@ -10,9 +10,27 @@ const typeDefs = loadSchemaSync('src/graphql/schema.graphql', {
   loaders: [new GraphQLFileLoader()]
 })
 
+const mocks = {
+  Contact: {
+    __typename: 'Contact',
+    id: () => '1',
+    name: () => 'Tim',
+    email: () => 'timvernaeve@gmail.com',
+    phone: () => '0412457863'
+  },
+  Company: {
+    __typename: 'Company',
+    id: () => '2',
+    name: () => 'Vertuoza',
+    industry: () => 'Software',
+    contactEmail: () => 'info@vertuoza.com'
+  }
+}
+
 const server = new ApolloServer({
   schema: addMocksToSchema({
-    schema: makeExecutableSchema({ typeDefs })
+    schema: makeExecutableSchema({ typeDefs }),
+    mocks
   })
 })
 
