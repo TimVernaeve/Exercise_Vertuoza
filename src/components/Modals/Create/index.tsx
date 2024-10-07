@@ -21,7 +21,7 @@ import { type CompanySchema, type ContactSchema } from '@/types/zod/schema'
 const CreateModal = () => {
   const [open, setOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | undefined>()
-  const [activeForm, setActiveFrom] = useState<'Contact' | 'Company'>('Contact')
+  const [activeForm, setActiveForm] = useState<'Contact' | 'Company'>('Contact')
   const [createEntity] = useCreateEntityMutation()
 
   const onSubmit = async (data: z.infer<typeof CompanySchema> | z.infer<typeof ContactSchema>) => {
@@ -49,6 +49,7 @@ const CreateModal = () => {
         toast({
           title: `New ${activeForm} added succesfully`
         })
+        setActiveForm('Contact')
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -57,6 +58,11 @@ const CreateModal = () => {
       }
       setErrorMessage('something went wrong')
     }
+  }
+
+  const handleOpenChange = (bool: boolean) => {
+    setOpen(bool)
+    setActiveForm('Contact')
   }
 
   return (
@@ -75,14 +81,14 @@ const CreateModal = () => {
               variant={activeForm === 'Contact' ? 'active' : 'inactive'}
               className='w-fit'
               type='button'
-              onClick={() => { setActiveFrom('Contact') }}
+              onClick={() => { setActiveForm('Contact') }}
             >
               Contact
             </Button>
             <Button
               variant={activeForm === 'Company' ? 'active' : 'inactive'}
               type='button'
-              onClick={() => { setActiveFrom('Company') }}
+              onClick={() => { setActiveForm('Company') }}
             >
               Company
             </Button>
@@ -90,7 +96,7 @@ const CreateModal = () => {
           {activeForm === 'Contact' && (
             <ContactForm
               handleSubmit={onSubmit}
-              onOpenChange={setOpen}
+              onOpenChange={handleOpenChange}
             />
           )}
           {activeForm === 'Company' && (
@@ -98,7 +104,7 @@ const CreateModal = () => {
               handleSubmit={(data) => {
                 void onSubmit(data)
               }}
-              onOpenChange={setOpen}
+              onOpenChange={handleOpenChange}
             />
           )}
           {errorMessage && <span className='text-sm text-red-500'>{errorMessage}</span>}

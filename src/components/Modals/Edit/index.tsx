@@ -25,7 +25,7 @@ interface DataValues {
 const EditModal = (params: DataValues) => {
   const [open, setOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | undefined>()
-  const [activeForm, setActiveFrom] = useState<'Contact' | 'Company'>(params.data.__typename ?? 'Contact')
+  const [activeForm, setActiveForm] = useState<'Contact' | 'Company'>(params.data.__typename ?? 'Contact')
   const [updateEntity] = useUpdateEntityMutation()
 
   const onSubmit = async (data: z.infer<typeof CompanySchema> | z.infer<typeof ContactSchema>) => {
@@ -54,6 +54,7 @@ const EditModal = (params: DataValues) => {
         toast({
           title: `${activeForm} updated succesfully`
         })
+        setActiveForm(params.data.__typename ?? 'Contact')
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -62,6 +63,11 @@ const EditModal = (params: DataValues) => {
       }
       setErrorMessage('something went wrong')
     }
+  }
+
+  const handleOpenChange = (bool: boolean) => {
+    setOpen(bool)
+    setActiveForm(params.data.__typename ?? 'Contact')
   }
 
   return (
@@ -82,14 +88,14 @@ const EditModal = (params: DataValues) => {
               variant={activeForm === 'Contact' ? 'active' : 'inactive'}
               className='w-fit'
               type='button'
-              onClick={() => { setActiveFrom('Contact') }}
+              onClick={() => { setActiveForm('Contact') }}
             >
               Contact
             </Button>
             <Button
               variant={activeForm === 'Company' ? 'active' : 'inactive'}
               type='button'
-              onClick={() => { setActiveFrom('Company') }}
+              onClick={() => { setActiveForm('Company') }}
             >
               Company
             </Button>
@@ -97,7 +103,7 @@ const EditModal = (params: DataValues) => {
           {errorMessage && <span className='text-sm text-red-500'>{errorMessage}</span>}
           {activeForm === 'Contact' && (
             <ContactForm
-              onOpenChange={setOpen}
+              onOpenChange={handleOpenChange}
               handleSubmit={(data) => {
                 void onSubmit(data)
               }}
@@ -106,7 +112,7 @@ const EditModal = (params: DataValues) => {
           )}
           {activeForm === 'Company' && (
             <CompanyForm
-              onOpenChange={setOpen}
+              onOpenChange={handleOpenChange}
               handleSubmit={onSubmit}
               data={params.data.__typename === 'Company' ? params.data : undefined}
             />
